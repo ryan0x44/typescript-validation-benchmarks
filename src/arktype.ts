@@ -1,27 +1,27 @@
-import { ZodError, z } from "zod";
+import { type } from "arktype";
 
 const numIterations = process?.argv?.[2] ? +process.argv[2] || 1 : 1;
 
-const userSchema = z.object({
-  name: z.string().min(1).max(255),
-  email: z.string().email(),
-  device: z.object({
-    platform: z.enum(["linux", "macos"]),
-  }),
+const userSchema = type({
+  name: "string>1&string<255",
+  email: "email",
+  device: {
+    platform: '"linux"|"macos"',
+  },
 });
 
 console.time("duration");
 for (let i = 0; i <= numIterations; i++) {
   const user1 = {
     name: `Invalid ${i}`,
-    email: "hello",
+    email: `hello${i}`,
     device: {
       platform: "not-real",
     },
   };
   const user2 = {
     name: `Valid ${i}`,
-    email: "test@example.com",
+    email: `test${i}@example.com`,
     device: {
       platform: "linux",
     },
@@ -30,22 +30,18 @@ for (let i = 0; i <= numIterations; i++) {
   if (numIterations === 1) {
     console.log("User 1 type: " + typeof user1);
     try {
-      userSchema.parse(user1);
+      userSchema.assert(user1);
       console.log("user 1 valid: " + JSON.stringify(user1));
     } catch (e) {
-      if (e instanceof ZodError) {
-        console.log("user 1 invalid: " + e.errors);
-      }
+      console.log("user 1 invalid: " + JSON.stringify(e));
     }
 
     console.log("User 2 type: " + typeof user2);
     try {
-      userSchema.parse(user2);
+      userSchema.assert(user2);
       console.log("user 2 valid: " + JSON.stringify(user2));
     } catch (e) {
-      if (e instanceof ZodError) {
-        console.log("user 2 invalid: " + e.errors);
-      }
+      console.log("user 2 invalid: " + JSON.stringify(e));
     }
   }
 }

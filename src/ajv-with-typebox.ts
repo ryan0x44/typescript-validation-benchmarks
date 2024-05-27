@@ -20,14 +20,14 @@ console.time("duration");
 for (let i = 0; i <= numIterations; i++) {
   const user1 = {
     name: `Invalid ${i}`,
-    email: "hello",
+    email: `hello${i}`,
     device: {
       platform: "not-real",
     },
   };
   const user2 = {
     name: `Valid ${i}`,
-    email: "test@example.com",
+    email: `test${i}@example.com`,
     device: {
       platform: "linux",
     },
