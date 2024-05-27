@@ -2,6 +2,11 @@
   "name": "typescript-validation-benchmarks",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "all": "./build.sh && ./benchmark.sh",
+    "build": "./build.sh",
+    "benchmark": "./benchmark.sh"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "prettier": "^3.2.5"
@@ -13,6 +18,7 @@
     "@sinclair/typebox": "^0.32.31",
     "ajv": "^8.14.0",
     "ajv-formats": "^3.0.1",
+    "arktype": "^2.0.0-dev.16",
     "zod": "^3.23.8"
   }
 }

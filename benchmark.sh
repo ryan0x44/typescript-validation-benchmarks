@@ -8,13 +8,13 @@ for tool in bc awk sed; do
   fi
 done
 
-options=(ajv-with-typebox typebox zod)
+scripts=(arktype ajv-with-typebox typebox zod)
 
-for option in "${options[@]}"; do
-  echo -n "Running benchmark for ${option}"
+for script in "${scripts[@]}"; do
+  echo -n "Running benchmark for ${script}"
   durations=()
   for i in {1..10}; do
-    output=$(bun run "dist/${option}.js" 1000 2>&1)
+    output=$(bun run "dist/${script}.js" 1000 2>&1)
     echo -n "."
     duration=$(echo "$output" | awk -F'[][]' '/duration/ {print $2}' | awk '{print $1}')
     # echo "Parsed duration: $duration"
@@ -33,9 +33,12 @@ for option in "${options[@]}"; do
     total=$(echo "$total + $duration" | bc -l)
   done
   average=$(echo "scale=2; $total / ${#durations[@]}" | bc -l)
+  filesize=$(stat -c%s "dist/${script}.js" 2>/dev/null || stat -f%z "dist/${script}.js")
+filesize_kb=$(echo "scale=2; $filesize / 1024" | bc -l)
 
   echo "Slowest: ${slowest}ms"
   echo "Fastest: ${fastest}ms"
   echo "Average: ${average}ms"
+  echo "Filesize: ${filesize_kb} KB"
   echo ""
 done

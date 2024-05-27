@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
-bun build --outfile dist/ajv-with-typebox.js --target=browser ajv-with-typebox.ts
-bun build --outfile dist/typebox.js --target=browser typebox.ts
-bun build --outfile dist/zod.js --target=browser zod.ts
+scripts=(arktype ajv-with-typebox typebox zod)
+
+for script in "${scripts[@]}"; do
+    bun build --outfile "dist/${script}.js" --target=browser "${script}.ts"
+done
